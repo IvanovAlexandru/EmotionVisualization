@@ -18,10 +18,15 @@ def fetch_comments(submission):
     return submission.title, submission.url, comments_list
 
 
-def fetch_submissions(query):
+def fetch_submissions(query,nr_posts,subreddit):
     post_comments_dict = {}
 
-    search_results = reddit.subreddit('all').search(query, limit=20)
+    if subreddit is None:
+        subreddit = 'all'
+    if nr_posts is None:
+        nr_posts = 10
+
+    search_results = reddit.subreddit(subreddit).search(query, limit=nr_posts)
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_submission = {executor.submit(fetch_comments, submission): submission for submission in

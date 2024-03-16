@@ -39,7 +39,7 @@ def analyze_emotions(posts):
     return scores
 
 
-def get_sentiment_analysis(query):
-    posts = reddit_api.fetch_submissions(query)
+def get_sentiment_analysis(topic, limit, subreddit):
+    posts = reddit_api.fetch_submissions(topic, limit, subreddit)
 
     return analyze_emotions(posts)
