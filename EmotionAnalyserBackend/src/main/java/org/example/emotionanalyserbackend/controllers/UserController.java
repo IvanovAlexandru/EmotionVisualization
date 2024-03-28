@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin
 public class UserController {
     private final UserService userService;
     private final HistoryService historyService;
@@ -42,14 +43,9 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserModel> getUserById(@PathVariable String id){
-
-        UserModel userModel = userService.getUserByIdFromDB(id);
-        if(userModel == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-        else return new ResponseEntity<>(userModel,HttpStatus.OK);
-
+    public ResponseEntity<UserModel> getUserById(@PathVariable String id,
+                                                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return userService.getUserByIdFromDB(id,token);
     }
 
     @DeleteMapping("{id}")
@@ -59,8 +55,9 @@ public class UserController {
 
     @PutMapping("{id}")
     public ResponseEntity<UserModel> editUserById(@PathVariable String id,
-                                                  @RequestBody UserModel userModel){
-        return userService.editUserInfo(id,userModel);
+                                                  @RequestBody UserModel userModel,
+                                                  @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return userService.editUserInfo(id,userModel,token);
     }
 
     @GetMapping("/{id}/history")

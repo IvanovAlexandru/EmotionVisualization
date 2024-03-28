@@ -40,8 +40,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserModel getUserByIdFromDB(String id){
-        return userRepository.findById(id).orElse(null);
+    public ResponseEntity<UserModel> getUserByIdFromDB(String id,String token){
+        if (validationUtil.verifyIdentity(token,id)){
+            UserModel userModel = userRepository.findById(id).orElse(null);
+            if(userModel == null){
+                return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            }
+            else return new ResponseEntity<>(userModel,HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
     }
 
     public ResponseEntity<UserModel> deleteUserByIdFromDB(String id){
@@ -69,7 +76,9 @@ public class UserService {
         return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<UserModel> editUserInfo(String id,UserModel userModel){
+    public ResponseEntity<UserModel> editUserInfo(String id,UserModel userModel,String token){
+        if( validationUtil.verifyIdentity(token,id))
+            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
         if(validationUtil.isValidUser(userModel)){
             UserModel userToFind = userRepository.findById(id).orElse(null);
             if(userToFind != null){

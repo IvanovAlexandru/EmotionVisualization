@@ -10,10 +10,12 @@ reddit = praw.Reddit(
 )
 
 
-def fetch_comments(submission):
+def fetch_comments(submission, limit=10):
     comments_list = []
     submission.comments.replace_more(limit=0)
-    for comment in submission.comments.list():
+    for i, comment in enumerate(submission.comments.list()):
+        if i >= limit:
+            break
         comments_list.append(comment.body)
     return submission.title, submission.url, comments_list
 
