@@ -21,9 +21,9 @@ export async function login(username, password) {
     }
 }
 
-export async function addUser(userModel) {
+export async function addUser(username,password,email) {
     const url = 'http://localhost:8080/api/auth/authenticate';
-    const requestBody = JSON.stringify(userModel);
+    const requestBody = JSON.stringify({username,password,email});
     try {
         const response = await fetch(url, {
             method: 'POST',

@@ -11,7 +11,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Paper } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import { login } from "../api/AuthenticationCalls";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -31,12 +35,25 @@ function Copyright(props) {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [token, setToken] = useState(null);
+  const [error, setError] = useState(null);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      username: data.get("username"),
       password: data.get("password"),
+    });
+    login(data.get("username"), data.get("password")).then((response) => {
+      if (response) {
+        setToken(response.token);
+        localStorage.setItem("token", token);
+        navigate("/main");
+      } else {
+        setError("Wrong credentials");
+      }
     });
   };
 
@@ -54,7 +71,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -89,19 +106,24 @@ export default function Login() {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="/auth" variant="body2">
+                {"Don't have an account?"}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
+      {error && (
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 2,
+            marginTop: 2,
+          }}>
+          <Alert severity="error">{error}</Alert>
+        </Paper>
+      )}
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
