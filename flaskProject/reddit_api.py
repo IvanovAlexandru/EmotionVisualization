@@ -1,7 +1,5 @@
-import concurrent
 import praw
-from concurrent.futures import ThreadPoolExecutor
-
+import concurrent.futures
 
 reddit = praw.Reddit(
     client_id="PI3P8_nZ23I6aIloiJARVg",
@@ -13,14 +11,24 @@ reddit = praw.Reddit(
 def fetch_comments(submission, limit=10):
     comments_list = []
     submission.comments.replace_more(limit=0)
+
     for i, comment in enumerate(submission.comments.list()):
         if i >= limit:
             break
         comments_list.append(comment.body)
-    return submission.title, submission.url, comments_list
+
+    score = submission.score
+    return submission.title, submission.url, comments_list, score
 
 
-def fetch_submissions(query,nr_posts,subreddit):
+def fetch_post_body(submission):
+    if submission.is_self:
+        return submission.selftext
+    else:
+        return None
+
+
+def fetch_submissions(query, nr_posts, subreddit=None):
     post_comments_dict = {}
 
     if subreddit is None:
@@ -30,14 +38,9 @@ def fetch_submissions(query,nr_posts,subreddit):
 
     search_results = reddit.subreddit(subreddit).search(query, limit=nr_posts)
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_submission = {executor.submit(fetch_comments, submission): submission for submission in
-                                search_results}
-        for future in concurrent.futures.as_completed(future_to_submission):
-            submission = future_to_submission[future]
-            try:
-                title, url, comments_list = future.result()
-                post_comments_dict[title] = {'url': url, 'comments': comments_list}
-            except Exception as e:
-                print(f"Error fetching comments for {submission.title}: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        for submission in search_results:
+            post_body = fetch_post_body(submission)
+            title, url, comments_list, score = fetch_comments(submission)
+            post_comments_dict[title] = {'url': url, 'upvotes': score, 'post_body': post_body, 'comments': comments_list}
     return post_comments_dict

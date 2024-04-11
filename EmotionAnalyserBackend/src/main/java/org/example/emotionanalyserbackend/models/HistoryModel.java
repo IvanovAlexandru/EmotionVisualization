@@ -15,5 +15,6 @@ import java.util.UUID;
 public class HistoryModel {
     private String id;
     private String topic;
+    private Double score;
     List<PostModel> postModels;
 }

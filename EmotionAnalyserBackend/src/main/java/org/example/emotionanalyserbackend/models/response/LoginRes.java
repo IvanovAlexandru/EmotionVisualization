@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRes {
+    private String id;
     private String username;
     private String token;
 }

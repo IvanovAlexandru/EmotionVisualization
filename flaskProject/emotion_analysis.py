@@ -65,14 +65,25 @@ def analyze_emotions(posts):
         title_score = analyzer.polarity_scores(title)['compound']
         comment_scores = [analyzer.polarity_scores(comment)['compound'] for comment in data['comments']]
 
-        if comment_scores:
-            avg_score = 0.3 * title_score + 0.7 * statistics.mean(comment_scores)
+        if comment_scores and data['post_body']:
+            body_score = analyzer.polarity_scores(data['post_body'])['compound']
+            avg_score = 0.2 * title_score + 0.3 * body_score + 0.5 * statistics.mean(comment_scores)
+
             scores.append({"title": title, "url": data['url'], "emotion": get_emotion(avg_score),
-                           "title_score": title_score, "comment_scores_avg": statistics.mean(comment_scores)})
+                           "body_score": body_score,"title_score": title_score,
+                           "comment_scores_avg": statistics.mean(comment_scores),
+                           "upvotes": data['upvotes'], "avg_score": avg_score})
+        elif comment_scores and not data['post_body']:
+            avg_score = 0.3 * title_score + 0.7 * statistics.mean(comment_scores)
+
+            scores.append({"title": title, "url": data['url'], "emotion": get_emotion(avg_score),
+                           "title_score": title_score, "comment_scores_avg": statistics.mean(comment_scores),
+                           "upvotes": data['upvotes'], "avg_score": avg_score})
         else:
             avg_score = title_score
+
             scores.append({"title": title, "url": data['url'], "emotion": get_emotion(avg_score),
-                           "title_score": title_score})
+                           "title_score": title_score, "upvotes": data['upvotes'], "avg_score": avg_score})
 
     return scores
 

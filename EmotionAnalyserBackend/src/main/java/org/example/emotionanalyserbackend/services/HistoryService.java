@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -97,7 +98,10 @@ public class HistoryService {
     }
 
     public HistoryModel convertPostListToHistory(String topic,List<PostModel> postModels){
-        return new HistoryModel(UUID.randomUUID().toString(),topic,postModels);
+        OptionalDouble average = postModels.stream()
+                .mapToDouble(PostModel::getAvgScore)
+                .average();
+        return new HistoryModel(UUID.randomUUID().toString(),topic,average.orElse(0.0),postModels);
     }
 
     public ResponseEntity<HistoryModel> searchTopic(String id,String topic,Integer limit,String subreddit) throws JsonProcessingException {
@@ -138,4 +142,5 @@ public class HistoryService {
         }
         else return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
     }
+
 }

@@ -36,7 +36,6 @@ function Copyright(props) {
 
 export default function Login() {
   const navigate = useNavigate();
-  const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
 
   const handleSubmit = (event) => {
@@ -48,8 +47,10 @@ export default function Login() {
     });
     login(data.get("username"), data.get("password")).then((response) => {
       if (response) {
-        setToken(response.token);
-        localStorage.setItem("token", token);
+        localStorage.clear();
+        localStorage.setItem("id",response.id);
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("username",response.username);
         navigate("/main");
       } else {
         setError("Wrong credentials");

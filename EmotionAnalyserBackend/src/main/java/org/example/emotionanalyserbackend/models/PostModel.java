@@ -16,6 +16,11 @@ public class PostModel {
     private String title;
     private String url;
     private String emotion;
+    private Integer upvotes;
+    @JsonProperty("avg_score")
+    private Double avgScore;
+    @JsonProperty("body_score")
+    private Double bodyScore;
     @JsonProperty("title_score")
     private Double titleScore;
     @JsonProperty("comment_scores_avg")
