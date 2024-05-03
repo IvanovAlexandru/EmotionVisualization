@@ -101,7 +101,30 @@ public class HistoryService {
         OptionalDouble average = postModels.stream()
                 .mapToDouble(PostModel::getAvgScore)
                 .average();
-        return new HistoryModel(UUID.randomUUID().toString(),topic,average.orElse(0.0),postModels);
+
+        return new HistoryModel(UUID.randomUUID().toString(),topic,getEmotion(average.orElse(0.0)),postModels);
+    }
+
+    public String getEmotion(double compoundScore) {
+        if (compoundScore >= 0.7) {
+            return "Ecstatic";
+        } else if (compoundScore >= 0.5) {
+            return "Very Happy";
+        } else if (compoundScore >= 0.3) {
+            return "Happy";
+        } else if (compoundScore >= 0.1) {
+            return "Content";
+        } else if (compoundScore <= -0.7) {
+            return "Enraged";
+        } else if (compoundScore <= -0.5) {
+            return "Very Angry";
+        } else if (compoundScore <= -0.3) {
+            return "Angry";
+        } else if (compoundScore <= -0.1) {
+            return "Irritated";
+        } else {
+            return "Neutral";
+        }
     }
 
     public ResponseEntity<HistoryModel> searchTopic(String id,String topic,Integer limit,String subreddit) throws JsonProcessingException {

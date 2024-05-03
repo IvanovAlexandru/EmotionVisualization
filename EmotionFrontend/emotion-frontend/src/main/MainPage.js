@@ -10,10 +10,10 @@ export default function MainPage() {
     <Container component="main" maxWidth="">
       <CssBaseline />
       <Box display="flex" justifyContent="space-between">
-        <Box display="flex" justifyContent="flex-start">
+        <Box display="flex" justifyContent="flex-start" mb={2}>
           <History/>
         </Box>
-        <Box display="flex" justifyContent="center">  
+        <Box display="flex" justifyContent="center" mb={2}>  
           <Search />
         </Box>
         <Box display="flex" justifyContent="flex-end" mb={2}>
