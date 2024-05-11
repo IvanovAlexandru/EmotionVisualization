@@ -16,6 +16,8 @@ import Alert from "@mui/material/Alert";
 import { login } from "../api/AuthenticationCalls";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "./AuthContext";
 
 function Copyright(props) {
   return (
@@ -36,6 +38,7 @@ function Copyright(props) {
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setAuthenticated } = useContext(AuthContext);
   const [error, setError] = useState(null);
 
   const handleSubmit = (event) => {
@@ -51,9 +54,11 @@ export default function Login() {
         localStorage.setItem("id",response.id);
         localStorage.setItem("token", response.token);
         localStorage.setItem("username",response.username);
+        setAuthenticated(true);
         navigate("/main");
       } else {
         setError("Wrong credentials");
+        setAuthenticated(false);
       }
     });
   };

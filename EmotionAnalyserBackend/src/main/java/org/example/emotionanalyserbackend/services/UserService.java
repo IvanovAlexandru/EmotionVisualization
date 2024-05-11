@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.emotionanalyserbackend.models.HistoryModel;
 import org.example.emotionanalyserbackend.models.PostModel;
 import org.example.emotionanalyserbackend.models.UserModel;
+import org.example.emotionanalyserbackend.models.response.UserRes;
 import org.example.emotionanalyserbackend.repositories.UserRepository;
 import org.example.emotionanalyserbackend.util.ValidationUtil;
 import org.springframework.context.annotation.Bean;
@@ -40,13 +41,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public ResponseEntity<UserModel> getUserByIdFromDB(String id,String token){
+    public ResponseEntity<UserRes> getUserByIdFromDB(String id, String token){
         if (validationUtil.verifyIdentity(token,id)){
             UserModel userModel = userRepository.findById(id).orElse(null);
             if(userModel == null){
                 return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
             }
-            else return new ResponseEntity<>(userModel,HttpStatus.OK);
+            else return new ResponseEntity<>(new UserRes(userModel.getUsername(),userModel.getEmail()),HttpStatus.OK);
         }
         else return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
     }

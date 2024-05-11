@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, TextField, Button, Container} from "@mui/material";
+import { Box, TextField, Button, Container } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
@@ -8,9 +8,10 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import Paper from "@mui/material/Paper";
 import { useState } from "react";
+import EmotionBarChart from "../data/EmotionBarChart";
 
-export default function Search() {
-  const [nrPosts, setNrPosts] = useState(null);
+export default function Search({ selectedItem }) {
+  const [nrPosts, setNrPosts] = useState(10);
 
   const handlePostsChange = (event) => {
     setNrPosts(event.target.value);
@@ -19,8 +20,18 @@ export default function Search() {
   return (
     <Container>
       <Paper elevation={3} sx={{ paddingLeft: 2, paddingRight: 2 }}>
-        <Box display="flex" alignItems="center" marginTop={2}>
-          <TextField id="topic" label="Topic" color="primary" focused />
+        <Box
+          display="flex"
+          alignItems="center"
+          marginTop={2}
+          sx={{ padding: 1 }}>
+          <TextField
+            id="topic"
+            label="Topic"
+            color="primary"
+            focused
+            sx={{ marginRight: 2 }}
+          />
           <TextField id="subreddit" label="Subreddit" color="primary" focused />
           <FormControl sx={{ m: 1, minWidth: 80, maxWidth: 100 }}>
             <InputLabel id="nr-posts">Posts</InputLabel>
@@ -31,7 +42,7 @@ export default function Search() {
               label="Nr. of Posts"
               onChange={handlePostsChange}
               color="primary"
-              focused>
+              focused="true">
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -42,6 +53,13 @@ export default function Search() {
           </IconButton>
         </Box>
       </Paper>
+      <Box sx={{padding: 2}}>
+        {selectedItem ? (
+          <EmotionBarChart posts={selectedItem.postModels} />
+        ) : (
+          <div />
+        )}
+      </Box>
     </Container>
   );
 }

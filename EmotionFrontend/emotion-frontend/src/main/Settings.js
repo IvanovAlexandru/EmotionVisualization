@@ -5,8 +5,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { CssBaseline, IconButton, Paper } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../authentication/AuthContext";
+import { useContext } from "react";
 
 export default function Settings() {
+
+  const { setAuthenticated } = useContext(AuthContext);
+  const navigator = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -16,6 +22,15 @@ export default function Settings() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    setAuthenticated(false);
+    localStorage.clear();
+    navigator('/')
+  }
+
+  const handleAccount = () => {
+    navigator('/account');
+  }
   return (
     <div>
       <Tooltip title="Settings">
@@ -37,9 +52,8 @@ export default function Settings() {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}>
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleAccount}>My account</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
   );

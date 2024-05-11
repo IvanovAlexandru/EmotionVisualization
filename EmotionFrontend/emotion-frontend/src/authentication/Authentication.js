@@ -47,7 +47,7 @@ export default function Authentication() {
     });
     addUser(data.get("username"), data.get("password"), data.get("email"))
       .then(() => {
-        if(data){
+        if(!data){
           setError("Unable to create account with these credentials")
         }
         else{

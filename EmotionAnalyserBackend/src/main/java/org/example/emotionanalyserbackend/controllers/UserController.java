@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.example.emotionanalyserbackend.models.HistoryModel;
 import org.example.emotionanalyserbackend.models.PostModel;
 import org.example.emotionanalyserbackend.models.UserModel;
+import org.example.emotionanalyserbackend.models.response.UserRes;
 import org.example.emotionanalyserbackend.services.HistoryService;
 import org.example.emotionanalyserbackend.services.PostService;
 import org.example.emotionanalyserbackend.services.UserService;
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserModel> getUserById(@PathVariable String id,
-                                                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<UserRes> getUserById(@PathVariable String id,
+                                               @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         return userService.getUserByIdFromDB(id,token);
     }
 
