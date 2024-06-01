@@ -77,22 +77,24 @@ public class UserService {
         return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<UserModel> editUserInfo(String id,UserModel userModel,String token){
-        if( validationUtil.verifyIdentity(token,id))
+    public ResponseEntity<UserModel> editUserInfo(String id,UserRes userRes,String token){
+        if(!validationUtil.verifyIdentity(token,id)) {
             return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
-        if(validationUtil.isValidUser(userModel)){
-            UserModel userToFind = userRepository.findById(id).orElse(null);
+        }
+        UserModel userToFind = userRepository.findById(id).orElse(null);
+        if(validationUtil.isValidEmail(userRes.getEmail())){
             if(userToFind != null){
-                userToFind = userModel;
+                userToFind.setUsername(userRes.getUsername());
+                userToFind.setEmail(userRes.getEmail());
                 userRepository.save(userToFind);
                 return new ResponseEntity<>(userToFind,HttpStatus.NO_CONTENT);
             }
             else {
-                userRepository.save(userModel);
-                return new ResponseEntity<>(userModel,HttpStatus.CREATED);
+                userRepository.save(userToFind);
+                return new ResponseEntity<>(userToFind,HttpStatus.CREATED);
             }
         }
-        else return new ResponseEntity<>(userModel,HttpStatus.UNPROCESSABLE_ENTITY);
+        else return new ResponseEntity<>(userToFind,HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

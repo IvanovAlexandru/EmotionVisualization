@@ -15,14 +15,26 @@ import PersonIcon from '@mui/icons-material/Person';
 import { grey } from "@mui/material/colors";
 import { getAllUsersHistory, getUserById, deleteHistory } from "../api/ApiCalls";
 
-export default function History({ onItemClick }) {
+const emotionColors = {
+  Enraged: '#8b0000',        // DarkRed
+  "Very Angry": '#dc143c',   // Crimson
+  Angry: '#ff4500',          // OrangeRed
+  Irritated: '#ff6347',      // Tomato
+  Neutral: '#808080',        // Grey
+  Content: '#c0ff33',        // Light Green
+  Happy: '#ffdf00',          // Yellow
+  "Very Happy": '#ffa500',   // Dark Orange
+  Overjoyed: '#ffb347'       // Orange
+};
+
+export default function History({ onItemClick, refreshTrigger }) {
   const [historyData, setHistoryData] = useState([]);
   const [userData, setUserData] = useState({ username: '', email: '' });
 
   useEffect(() => {
     fetchData();
     fetchUserData();
-  }, []);
+  }, [refreshTrigger]);
 
   const fetchData = async () => {
     const id = localStorage.getItem("id");
@@ -71,34 +83,29 @@ export default function History({ onItemClick }) {
             {userData.email || 'user@example.com'}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            User History
+            History
           </Typography>
         </CardContent>
       </Card>
       <List component="nav" aria-label="user history">
         {historyData.map((item, index) => (
-          <ListItem 
-            key={index} 
-            secondaryAction={
-              <Tooltip title="Delete">
-                <IconButton 
-                  edge="end" 
-                  aria-label="delete" 
-                  onClick={() => handleDelete(item)}
-                  sx={{
-                    color: grey[500],
-                    '&:hover': {
-                      color: 'red',
-                    }
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            }
-          >
+          <ListItem key={index} secondaryAction={
+            <Tooltip title="Delete">
+              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(item)}
+                sx={{
+                  color: grey[500],
+                  '&:hover': {
+                    color: 'red',
+                  }
+                }}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          }>
             <ListItemButton onClick={() => onItemClick(item)}>
-              <ListItemText primary={item.topic} secondary={`Emotion: ${item.emotion}`} />
+              <ListItemText primary={item.topic}
+                secondary={`Overall Emotion: ${item.emotion}`}
+                primaryTypographyProps={{ style: { color: emotionColors[item.emotion] || grey[500] } }} />
             </ListItemButton>
           </ListItem>
         ))}

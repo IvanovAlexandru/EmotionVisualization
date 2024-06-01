@@ -107,25 +107,22 @@ public class HistoryService {
 
     public String getEmotion(double compoundScore) {
         if (compoundScore >= 0.7) {
-            return "Ecstatic";
-        } else if (compoundScore >= 0.5) {
+            return "Overjoyed";
+        } else if (compoundScore >= 0.48) {
             return "Very Happy";
-        } else if (compoundScore >= 0.3) {
+        } else if (compoundScore >= 0.28) {
             return "Happy";
-        } else if (compoundScore >= 0.1) {
+        } else if (compoundScore >= 0.08) {
             return "Content";
-        } else if (compoundScore <= -0.7) {
-            return "Enraged";
-        } else if (compoundScore <= -0.5) {
-            return "Very Angry";
-        } else if (compoundScore <= -0.3) {
-            return "Angry";
-        } else if (compoundScore <= -0.1) {
+        } else if (compoundScore >= -0.06) {
+            return "Neutral";
+        } else if (compoundScore >= -0.27) {
             return "Irritated";
         } else {
-            return "Neutral";
+            return "Very Angry";
         }
     }
+
 
     public ResponseEntity<HistoryModel> searchTopic(String id,String topic,Integer limit,String subreddit) throws JsonProcessingException {
 

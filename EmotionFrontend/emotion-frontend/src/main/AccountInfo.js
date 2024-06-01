@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -9,13 +10,15 @@ import {
   Paper,
   Alert,
   Box,
+  IconButton,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AuthContext from "../authentication/AuthContext";
-import { getUserById } from "../api/ApiCalls";
-import { editUserById } from "../api/ApiCalls";
+import { getUserById, editUserById } from "../api/ApiCalls";
 
 export default function AccountInfo() {
+  const navigate = useNavigate();
   const { authenticated, setAuthenticated } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({ username: "", email: "" });
   const [error, setError] = useState(null);
@@ -44,13 +47,20 @@ export default function AccountInfo() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
 
-    editUserById();
-    console.log("Updated user info:", userInfo);
-    // You may want to add an API function to update the user info
+    editUserById(id, userInfo, token).then((response) => {
+      if (response) {
+        console.log(userInfo);
+      } else {
+        setError("Unable to update account with these credentials");
+      }
+    });
+  };
+
+  const handleNavigateMain = () => {
+    navigate('/main');
   };
 
   if (!authenticated) {
@@ -64,6 +74,15 @@ export default function AccountInfo() {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      <IconButton
+        onClick={handleNavigateMain}
+        sx={{ 
+          position: 'fixed',
+          top: 20,
+          right: 20
+        }}>
+        <ArrowBackIcon fontSize="large"/>
+      </IconButton>
       <Box
         sx={{
           marginTop: 8,
@@ -106,7 +125,7 @@ export default function AccountInfo() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}>
-            Update Info
+            Update
           </Button>
         </Box>
       </Box>

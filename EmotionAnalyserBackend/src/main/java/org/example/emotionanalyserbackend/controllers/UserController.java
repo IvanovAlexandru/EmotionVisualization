@@ -56,9 +56,9 @@ public class UserController {
 
     @PutMapping("{id}")
     public ResponseEntity<UserModel> editUserById(@PathVariable String id,
-                                                  @RequestBody UserModel userModel,
+                                                  @RequestBody UserRes userRes,
                                                   @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
-        return userService.editUserInfo(id,userModel,token);
+        return userService.editUserInfo(id,userRes,token);
     }
 
     @GetMapping("/{id}/history")

@@ -105,7 +105,7 @@ export async function searchTopic(id,topic,limit = 10,subreddit = 'all',token) {
     }
 }
 
-export async function deleteHistory(id,historyId,token) {
+export async function deleteHistory(id, historyId, token) {
     try {
         const response = await fetch(`${baseUrl}/${id}/history/${historyId}`, {
             method: 'DELETE',
@@ -113,11 +113,24 @@ export async function deleteHistory(id,historyId,token) {
                 'Authorization': `Bearer ${token}`
             }
         });
-        return await response.json();
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return await response.json();
+        } else {
+            console.log('No JSON content returned from delete operation');
+            return response.statusText;
+        }
     } catch (error) {
         console.error('Error:', error);
+        throw error;
     }
 }
+
 
 export async function getAllPostsFromHistory(id,historyId,token){
     try {

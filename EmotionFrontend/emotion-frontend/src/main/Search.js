@@ -1,65 +1,136 @@
 import * as React from "react";
-import { Box, TextField, Button, Container } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
+import {
+  Box,
+  TextField,
+  IconButton,
+  Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Paper,
+  Typography,
+  Tooltip,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import Paper from "@mui/material/Paper";
+import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
 import EmotionBarChart from "../data/EmotionBarChart";
+import { searchTopic } from "../api/ApiCalls";
+import PostList from "../data/PostList";
 
-export default function Search({ selectedItem }) {
+export default function Search({
+  selectedItem,
+  setSelectedItem,
+  onSearchComplete,
+}) {
   const [nrPosts, setNrPosts] = useState(10);
+  const [topic, setTopic] = useState("");
+  const [subreddit, setSubreddit] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePostsChange = (event) => {
     setNrPosts(event.target.value);
   };
 
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
+
+      const data = await searchTopic(
+        id,
+        topic,
+        nrPosts,
+        subreddit || "all",
+        token
+      );
+      setSelectedItem(data);
+      onSearchComplete();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setLoading(false);
+  };
+
   return (
     <Container>
-      <Paper elevation={3} sx={{ paddingLeft: 2, paddingRight: 2 }}>
+      <Paper
+        elevation={3}
+        sx={{ p: 3, marginTop: 2, display: "flex", flexDirection: "column" }}>
+        <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center" }}>
+          Search
+        </Typography>
         <Box
           display="flex"
           alignItems="center"
-          marginTop={2}
-          sx={{ padding: 1 }}>
+          justifyContent="center"
+          sx={{ marginBottom: 2 }}>
           <TextField
+            fullWidth
             id="topic"
             label="Topic"
-            color="primary"
-            focused
-            sx={{ marginRight: 2 }}
+            variant="outlined"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            sx={{ flex: 1, marginRight: 2 }}
           />
-          <TextField id="subreddit" label="Subreddit" color="primary" focused />
-          <FormControl sx={{ m: 1, minWidth: 80, maxWidth: 100 }}>
-            <InputLabel id="nr-posts">Posts</InputLabel>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flex: 1,
+              marginRight: 2,
+            }}>
+            <TextField
+              fullWidth
+              id="subreddit"
+              label="Subreddit (Optional)"
+              variant="outlined"
+              value={subreddit}
+              onChange={(e) => setSubreddit(e.target.value)}
+            />
+            <Tooltip
+              title="Leave blank to search all subreddits"
+              placement="right">
+              <IconButton>
+                <InfoIcon color="action" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <FormControl sx={{ width: 150, marginRight: 2 }}>
+            <InputLabel id="nr-posts-label">Nr. of Posts</InputLabel>
             <Select
-              labelId="nr-posts"
+              labelId="nr-posts-label"
               id="select-nr-posts"
               value={nrPosts}
-              label="Nr. of Posts"
               onChange={handlePostsChange}
-              color="primary"
-              focused="true">
+              label="Nr. of Posts">
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </FormControl>
-          <IconButton color="primary" style={{ marginLeft: "8px" }}>
-            <SearchIcon />
+          <IconButton color="primary" onClick={handleSearch}>
+            {loading ? <CircularProgress size={24} /> : <SearchIcon />}
           </IconButton>
         </Box>
-      </Paper>
-      <Box sx={{padding: 2}}>
-        {selectedItem ? (
-          <EmotionBarChart posts={selectedItem.postModels} />
-        ) : (
-          <div />
+        {selectedItem && (
+          <Box sx={{ mt: 2, p: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <PostList posts={selectedItem.postModels} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <EmotionBarChart posts={selectedItem.postModels} />
+              </Grid>
+            </Grid>
+          </Box>
         )}
-      </Box>
+      </Paper>
     </Container>
   );
 }
