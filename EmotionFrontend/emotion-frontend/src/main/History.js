@@ -42,6 +42,7 @@ export default function History({ onItemClick, refreshTrigger }) {
     try {
       const data = await getAllUsersHistory(id, token);
       setHistoryData(data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching history:", error);
     }

@@ -40,6 +40,9 @@ def detect_language(text):
         print("Error occurred during language detection:", e)
         return False
 
+
+def get_emotions_from_plain_text(text):
+    
 def analyze_emotions(posts):
     analyzer = SentimentIntensityAnalyzer()
     scores = []

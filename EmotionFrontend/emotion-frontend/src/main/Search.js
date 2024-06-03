@@ -17,9 +17,13 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
-import EmotionBarChart from "../data/EmotionBarChart";
+import EmotionPieChart from "../data/EmotionPieChart";
 import { searchTopic } from "../api/ApiCalls";
 import PostList from "../data/PostList";
+import TitleCommentsBarChart from "../data/TitleCommentsBarChart";
+import CommentScorePieChart from "../data/CommentScorePieChart";
+import UpvotesEmotionBarChart from "../data/UpvotesEmotionsBarChart";
+import AverageEmotionScoreLineChart from "../data/AverageEmotionScoreLineChart";
 
 export default function Search({
   selectedItem,
@@ -124,8 +128,22 @@ export default function Search({
               <Grid item xs={12} md={6}>
                 <PostList posts={selectedItem.postModels} />
               </Grid>
+              <Grid item container xs={12} md={6} spacing={2}>
+                <Grid item xs={12}>
+                  <EmotionPieChart posts={selectedItem.postModels} />
+                </Grid>
+                <Grid item xs={12}>
+                  <CommentScorePieChart posts={selectedItem.postModels} />
+                </Grid>
+                <Grid item xs={12}>
+                  <TitleCommentsBarChart posts={selectedItem.postModels} />
+                </Grid>
+              </Grid>
               <Grid item xs={12} md={6}>
-                <EmotionBarChart posts={selectedItem.postModels} />
+                <UpvotesEmotionBarChart posts={selectedItem.postModels} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <AverageEmotionScoreLineChart posts={selectedItem.postModels} />
               </Grid>
             </Grid>
           </Box>

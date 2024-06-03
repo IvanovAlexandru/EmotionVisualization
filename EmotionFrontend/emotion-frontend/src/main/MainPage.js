@@ -21,13 +21,13 @@ export default function MainPage() {
     <Container component="main" maxWidth="">
       <CssBaseline />
       <Box display="flex" justifyContent="space-between">
-        <Box display="flex" justifyContent="flex-start" mb={2} mt={2}>
+        <Box display="flex" justifyContent="flex-start" mb={1} mt={1}>
           <History onItemClick={handleHistoryItemClick} refreshTrigger={refreshHistory}/>
         </Box>
-        <Box display="flex" justifyContent="center" mb={2} mt={2} >  
+        <Box display="flex" justifyContent="center" mb={1} mt={1}>  
           <Search selectedItem={selectedItem} setSelectedItem={setSelectedItem} onSearchComplete={toggleRefreshHistory}/>
         </Box>
-        <Box display="flex" justifyContent="flex-end" mb={2} mt={2}>
+        <Box display="flex" justifyContent="flex-end" mb={1} mt={1}>
           <Settings />
         </Box>
       </Box>
