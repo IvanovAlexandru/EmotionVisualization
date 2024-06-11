@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Getter;
 import org.example.emotionanalyserbackend.models.HistoryModel;
 import org.example.emotionanalyserbackend.models.PostModel;
+import org.example.emotionanalyserbackend.models.TextModel;
 import org.example.emotionanalyserbackend.models.UserModel;
 import org.example.emotionanalyserbackend.models.response.UserRes;
 import org.example.emotionanalyserbackend.services.HistoryService;
@@ -102,6 +103,18 @@ public class UserController {
                                                             @PathVariable String postId,
                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         return postService.getPostForHistoryById(id,historyId,postId,token);
+    }
+
+    @PostMapping("/{id}/text")
+    public ResponseEntity<TextModel> getEmotionFromPlainText(@PathVariable String id,
+                                                             @RequestParam String text,
+                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws JsonProcessingException {
+        TextModel textModel = historyService.getEmotionsFromText(text);
+
+        if(textModel == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(textModel, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/history/{historyId}/post/{postId}")

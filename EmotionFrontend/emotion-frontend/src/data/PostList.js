@@ -2,15 +2,13 @@ import React from 'react';
 import { Box, Typography, Link, Paper } from '@mui/material';
 
 const emotionColors = {
-    Ecstatic: '#ffb347',      // Orange
-    "Very Happy": '#ffa500',  // Dark Orange
-    Happy: '#ffdf00',         // Yellow
-    Content: '#c0ff33',       // Light Green
-    Neutral: '#808080',       // Grey
-    Irritated: '#ff6347',     // Tomato
-    Angry: '#ff4500',         // OrangeRed
-    "Very Angry": '#dc143c',  // Crimson
-    Enraged: '#8b0000'        // DarkRed
+  "Very Angry": '#dc143c',   // Crimson
+    Angry: '#ff4500',          // OrangeRed
+    Neutral: '#808080',        // Grey
+    Content: '#c0ff33',        // Light Green
+    Happy: '#ffdf00',          // Yellow
+    "Very Happy": '#ffa500',   // Dark Orange
+    Overjoyed: '#ffb347'       // Orange
 };
 
 const PostList = ({ posts }) => {

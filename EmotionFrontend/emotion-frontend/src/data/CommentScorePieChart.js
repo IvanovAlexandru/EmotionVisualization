@@ -4,10 +4,8 @@ import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from 'recha
 
 const CommentScorePieChart = ({ posts }) => {
   const colorMap = {
-    Enraged: '#8b0000',        // DarkRed
     "Very Angry": '#dc143c',   // Crimson
     Angry: '#ff4500',          // OrangeRed
-    Irritated: '#ff6347',      // Tomato
     Neutral: '#808080',        // Grey
     Content: '#c0ff33',        // Light Green
     Happy: '#ffdf00',          // Yellow
@@ -16,15 +14,13 @@ const CommentScorePieChart = ({ posts }) => {
   };
 
   const emotionOrder = {
-    Enraged: 1,
-    "Very Angry": 2,
-    Angry: 3,
-    Irritated: 4,
-    Neutral: 5,
-    Content: 6,
-    Happy: 7,
-    "Very Happy": 8,
-    Overjoyed: 9
+    "Very Angry": 1,
+    Angry: 2,
+    Neutral: 3,
+    Content: 4,
+    Happy: 5,
+    "Very Happy": 6,
+    Overjoyed: 7
   };
 
   const getEmotion = (compoundScore) => {
@@ -39,13 +35,12 @@ const CommentScorePieChart = ({ posts }) => {
     } else if (compoundScore >= -0.06) {
       return "Neutral";
     } else if (compoundScore >= -0.27) {
-      return "Irritated";
-    } else if (compoundScore >= -0.46) {
       return "Angry";
     } else {
       return "Very Angry";
     }
   };
+  
 
   const processData = () => {
     const counts = posts.reduce((acc, post) => {

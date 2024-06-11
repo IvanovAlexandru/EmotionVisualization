@@ -4,10 +4,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Do
 
 const AverageEmotionScoreLineChart = ({ posts }) => {
   const colorMap = {
-    Enraged: '#8b0000',        // DarkRed
     "Very Angry": '#dc143c',   // Crimson
     Angry: '#ff4500',          // OrangeRed
-    Irritated: '#ff6347',      // Tomato
     Neutral: '#808080',        // Grey
     Content: '#c0ff33',        // Light Green
     Happy: '#ffdf00',          // Yellow

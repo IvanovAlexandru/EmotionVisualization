@@ -13,6 +13,7 @@ import Authentication from "./authentication/Authentication";
 import MainPage from "./main/MainPage";
 import AuthContext from "./authentication/AuthContext";
 import AccountInfo from "./main/AccountInfo";
+import PlainText from "./main/PlainText";
 
 const defaultTheme = createTheme(themeOptions);
 
@@ -40,6 +41,11 @@ function App() {
               <Route path="/account" element={<AccountInfo />} />
             ) : (
               <Route path="/account" element={<Navigate to="/" />} />
+            )}
+            {authenticated ? (
+              <Route path="/text" element={<PlainText />} />
+            ) : (
+              <Route path="/text" element={<Navigate to="/" />} />
             )}
           </Routes>
         </Router>

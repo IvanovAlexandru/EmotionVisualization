@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.emotionanalyserbackend.models.HistoryModel;
 import org.example.emotionanalyserbackend.models.PostModel;
+import org.example.emotionanalyserbackend.models.TextModel;
 import org.example.emotionanalyserbackend.models.UserModel;
 import org.example.emotionanalyserbackend.repositories.HistoryRepository;
 import org.example.emotionanalyserbackend.repositories.UserRepository;
@@ -79,6 +80,17 @@ public class HistoryService {
         return response.getBody();
     }
 
+    public TextModel getEmotionsFromText(String text) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://127.0.0.1:5000/emotion";
+        String fullUrl = url + "?text=" + text;
+        ResponseEntity<String> response = restTemplate.getForEntity(fullUrl, String.class);
+        String json = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        TextModel textModel = objectMapper.readValue(json, new TypeReference<TextModel>() {});
+        return textModel;
+    }
     public List<PostModel> convertJsonToPostList(String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<PostModel> postList = objectMapper.readValue(json, new TypeReference<List<PostModel>>() {});
@@ -117,7 +129,7 @@ public class HistoryService {
         } else if (compoundScore >= -0.06) {
             return "Neutral";
         } else if (compoundScore >= -0.27) {
-            return "Irritated";
+            return "Angry";
         } else {
             return "Very Angry";
         }

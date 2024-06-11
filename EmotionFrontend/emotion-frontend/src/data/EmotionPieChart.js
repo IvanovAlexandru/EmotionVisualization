@@ -4,10 +4,8 @@ import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from 'recha
 
 const EmotionPieChart = ({ posts }) => {
   const colorMap = {
-    Enraged: '#8b0000',        // DarkRed
     "Very Angry": '#dc143c',   // Crimson
     Angry: '#ff4500',          // OrangeRed
-    Irritated: '#ff6347',      // Tomato
     Neutral: '#808080',        // Grey
     Content: '#c0ff33',        // Light Green
     Happy: '#ffdf00',          // Yellow

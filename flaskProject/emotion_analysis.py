@@ -7,6 +7,7 @@ import re
 
 translator = GoogleTranslator(source='auto', target='en')
 
+
 def get_emotion(compound_score):
     if compound_score >= 0.7:
         return "Overjoyed"
@@ -19,12 +20,19 @@ def get_emotion(compound_score):
     elif compound_score >= -0.06:
         return "Neutral"
     elif compound_score >= -0.27:
-        return "Irritated"
+        return "Angry"
     else:
         return "Very Angry"
 
+
 def remove_non_ascii(text):
     return re.sub(r'[^\x00-\x7F]+', '', text)
+
+
+def limit_punctuation(text):
+    text = re.sub(r'([!?]{3})([!?]+)', r'\1', text)
+    return text
+
 
 def translate_text(text):
     text = remove_non_ascii(text)
@@ -42,7 +50,20 @@ def detect_language(text):
 
 
 def get_emotions_from_plain_text(text):
-    
+    analyzer = SentimentIntensityAnalyzer()
+
+    if detect_language(text):
+        text = translate_text(text)
+
+    sentiment_score = analyzer.polarity_scores(limit_punctuation(text))['compound']
+    emotion = get_emotion(sentiment_score)
+
+    return {
+        "text": text,
+        "emotion": emotion,
+        "sentiment_score": sentiment_score
+    }
+
 def analyze_emotions(posts):
     analyzer = SentimentIntensityAnalyzer()
     scores = []
@@ -60,11 +81,11 @@ def analyze_emotions(posts):
                 comment = translate_text(comment)
             translated_comments.append(comment)
 
-        title_score = analyzer.polarity_scores(title)['compound']
-        comment_scores = [analyzer.polarity_scores(comment)['compound'] for comment in translated_comments]
+        title_score = analyzer.polarity_scores(limit_punctuation(title))['compound']
+        comment_scores = [analyzer.polarity_scores(limit_punctuation(comment))['compound'] for comment in translated_comments]
 
         if comment_scores and data['post_body']:
-            body_score = analyzer.polarity_scores(data['post_body'])['compound']
+            body_score = analyzer.polarity_scores(limit_punctuation(data['post_body']))['compound']
             avg_score = title_weight * title_score + body_weight * body_score + comment_weight * statistics.mean(comment_scores)
 
             scores.append({"title": title, "url": data['url'], "emotion": get_emotion(avg_score),
@@ -87,6 +108,7 @@ def analyze_emotions(posts):
                            "upvotes": data['upvotes'], "avg_score": avg_score})
 
     return scores
+
 
 def get_sentiment_analysis(topic, limit, subreddit):
     posts = reddit_api.fetch_submissions(topic, limit, subreddit)

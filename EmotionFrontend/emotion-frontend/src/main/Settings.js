@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IconButton, Tooltip, CssBaseline, Paper, Button, Menu, MenuItem } from "@mui/material";
+import { IconButton, Tooltip, Menu, MenuItem } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
@@ -34,6 +34,10 @@ export default function Settings() {
     navigate('/main');
   };
 
+  const handleText = () => {
+    navigate('/text')
+  }
+
   return (
     <div>
       <Tooltip title="Home">
@@ -67,6 +71,7 @@ export default function Settings() {
       >
         <MenuItem onClick={handleAccount}>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleText}>Test on your Text</MenuItem>
       </Menu>
     </div>
   );

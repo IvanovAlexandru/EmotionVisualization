@@ -16,15 +16,13 @@ import { grey } from "@mui/material/colors";
 import { getAllUsersHistory, getUserById, deleteHistory } from "../api/ApiCalls";
 
 const emotionColors = {
-  Enraged: '#8b0000',        // DarkRed
   "Very Angry": '#dc143c',   // Crimson
-  Angry: '#ff4500',          // OrangeRed
-  Irritated: '#ff6347',      // Tomato
-  Neutral: '#808080',        // Grey
-  Content: '#c0ff33',        // Light Green
-  Happy: '#ffdf00',          // Yellow
-  "Very Happy": '#ffa500',   // Dark Orange
-  Overjoyed: '#ffb347'       // Orange
+    Angry: '#ff4500',          // OrangeRed
+    Neutral: '#808080',        // Grey
+    Content: '#c0ff33',        // Light Green
+    Happy: '#ffdf00',          // Yellow
+    "Very Happy": '#ffa500',   // Dark Orange
+    Overjoyed: '#ffb347'       // Orange
 };
 
 export default function History({ onItemClick, refreshTrigger }) {

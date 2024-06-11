@@ -176,6 +176,20 @@ export async function deletePostFromHistoryById(id,historyId,postId,token) {
     }
 }
 
+export async function getEmotionsFromPlainText(id,text,token){
+    try {
+        const response = await fetch(`${baseUrl}/${id}/text?text=${text}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 // Example usage:
 // getAllUsers().then(data => console.log(data));
 // getUserById(1).then(data => console.log(data));

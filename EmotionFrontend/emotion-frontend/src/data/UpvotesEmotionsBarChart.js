@@ -4,10 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell
 
 const UpvotesEmotionBarChart = ({ posts }) => {
   const colorMap = {
-    Enraged: '#8b0000',        // DarkRed
     "Very Angry": '#dc143c',   // Crimson
     Angry: '#ff4500',          // OrangeRed
-    Irritated: '#ff6347',      // Tomato
     Neutral: '#808080',        // Grey
     Content: '#c0ff33',        // Light Green
     Happy: '#ffdf00',          // Yellow
@@ -16,15 +14,14 @@ const UpvotesEmotionBarChart = ({ posts }) => {
   };
 
   const emotionOrder = {
-    Enraged: 1,
-    "Very Angry": 2,
-    Angry: 3,
-    Irritated: 4,
-    Neutral: 5,
-    Content: 6,
-    Happy: 7,
-    "Very Happy": 8,
-    Overjoyed: 9
+    "Very Angry": 1,
+    Angry: 2,
+    Irritated: 3,
+    Neutral: 4,
+    Content: 5,
+    Happy: 6,
+    "Very Happy": 7,
+    Overjoyed: 8
   };
 
   const processData = () => {
