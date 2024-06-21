@@ -38,9 +38,9 @@ def fetch_submissions(query, nr_posts, subreddit=None):
 
     search_results = reddit.subreddit(subreddit).search(query, limit=nr_posts)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        for submission in search_results:
-            post_body = fetch_post_body(submission)
-            title, url, comments_list, score = fetch_comments(submission)
-            post_comments_dict[title] = {'url': url, 'upvotes': score, 'post_body': post_body, 'comments': comments_list}
+    for submission in search_results:
+        post_body = fetch_post_body(submission)
+        title, url, comments_list, score = fetch_comments(submission)
+        post_comments_dict[title] = {'url': url, 'upvotes': score, 'post_body': post_body, 'comments': comments_list}
+
     return post_comments_dict
