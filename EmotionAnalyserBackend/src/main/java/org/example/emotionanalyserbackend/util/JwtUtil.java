@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtUtil {
 
-    private final String secret_key = "secret_key";
+    private final String secret_key = "tralala";
     private final long accessTokenValidity = 60 * 60 * 1000;
 
     private final JwtParser jwtParser;
