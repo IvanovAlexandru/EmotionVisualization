@@ -14,15 +14,13 @@ const EmotionPieChart = ({ posts }) => {
   };
 
   const emotionOrder = {
-    Enraged: 1,
-    "Very Angry": 2,
-    Angry: 3,
-    Irritated: 4,
-    Neutral: 5,
-    Content: 6,
-    Happy: 7,
-    "Very Happy": 8,
-    Overjoyed: 9
+    "Very Angry": 1,
+    Angry: 2,
+    Neutral: 3,
+    Content: 4,
+    Happy: 5,
+    "Very Happy": 6,
+    Overjoyed: 7
   };
 
   const processData = () => {

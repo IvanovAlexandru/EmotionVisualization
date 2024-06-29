@@ -16,12 +16,11 @@ const UpvotesEmotionBarChart = ({ posts }) => {
   const emotionOrder = {
     "Very Angry": 1,
     Angry: 2,
-    Irritated: 3,
-    Neutral: 4,
-    Content: 5,
-    Happy: 6,
-    "Very Happy": 7,
-    Overjoyed: 8
+    Neutral: 3,
+    Content: 4,
+    Happy: 5,
+    "Very Happy": 6,
+    Overjoyed: 7
   };
 
   const processData = () => {
