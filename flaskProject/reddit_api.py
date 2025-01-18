@@ -1,5 +1,4 @@
 import praw
-import concurrent.futures
 
 reddit = praw.Reddit(
     client_id="PI3P8_nZ23I6aIloiJARVg",
